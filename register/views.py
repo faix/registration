@@ -67,7 +67,7 @@ class ReviewApplicationView(PermissionRequiredMixin, TemplateView):
     template_name = 'application_review.html'
 
     def get_comments(self):
-        return [{'author': "alvaro", 'message': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed consectetur nibh ac eros lacinia varius. Sed orci orci, commodo vitae feugiat ac, scelerisque sit amet nibh. Integer volutpat leo accumsan, dignissim ligula et, imperdiet est. Morbi id dignissim purus. Cras at urna vulputate, laoreet erat in, ullamcorper leo. Cras accumsan arcu ac purus fermentum iaculis a quis erat. Integer venenatis pretium aliquam. In gravida lectus felis, at molestie mi faucibus non.'}, {'author': "ablaro", 'message': 'comentario 2'}]
+        return [{'author': "alvaro", 'text': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed consectetur nibh ac eros lacinia varius. Sed orci orci, commodo vitae feugiat ac, scelerisque sit amet nibh. Integer volutpat leo accumsan, dignissim ligula et, imperdiet est. Morbi id dignissim purus. Cras at urna vulputate, laoreet erat in, ullamcorper leo. Cras accumsan arcu ac purus fermentum iaculis a quis erat. Integer venenatis pretium aliquam. In gravida lectus felis, at molestie mi faucibus non.'}, {'author': "ablaro", 'text': 'comentario 2'}]
 
     def get_context_data(self, **kwargs):
         context = super(ReviewApplicationView, self).get_context_data(**kwargs)

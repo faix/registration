@@ -63,7 +63,7 @@
                         <h4 class="text-center">Comments</h4>
                         <p class = "text-center">
                             {% for comment in comments %}
-                                {% include 'include/field.html' with desc=comment.author value=comment.message %}
+                                {% include 'include/field.html' with desc=comment.author value=comment.text %}
                             {% endfor %}
                         </p>
 

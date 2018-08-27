@@ -1,0 +1,13 @@
+{% extends "base_table.html" %}
+{% load django_tables2 %}
+{% block out_panel %}
+    <form action="" method="post">
+        {% csrf_token %}
+        <h1>Lendings</h1>
+        {% render_table table_lending 'django_tables2/bootstrap-responsive.html'%}
+        <h1>Requests</h1>
+        {% render_table table_request 'django_tables2/bootstrap-responsive.html'%}
+        {% block table_footer %}
+        {% endblock %}
+    </form>
+{% endblock %}

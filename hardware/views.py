@@ -4,11 +4,13 @@ from django.template.loader import render_to_string
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from django.utils import timezone
+from django_tables2 import MultiTableMixin
 from user.mixins import IsVolunteerMixin
 from app import hackathon_variables
 from app.mixins import TabsViewMixin
 from user.models import User
 from hardware.models import Item, ItemType, Lending, Request
+from hardware.tables import LendingTable, RequestTable
 
 
 def hardware_tabs(user):
@@ -19,6 +21,19 @@ def hardware_tabs(user):
         first_tab,
         ('Log', reverse('hw_log'), False)
     ]
+
+
+class HardwareAdminLogView(TabsViewMixin, IsVolunteerMixin, TemplateView):
+    template_name = 'hardware_log.html'
+
+    def get_current_tabs(self):
+        return hardware_tabs(self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super(HardwareAdminLogView, self).get_context_data(**kwargs)
+        context['table_lending'] =  Lending.objects.all()
+        context['table_request'] =  Request.objects.all()
+        return context
 
 
 class HardwareListView(LoginRequiredMixin, TabsViewMixin, TemplateView):

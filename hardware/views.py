@@ -4,7 +4,7 @@ from django.template.loader import render_to_string
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from django.utils import timezone
-from django_tables2 import MultiTableMixin
+from django_tables2 import SingleTableMixin
 from user.mixins import IsVolunteerMixin
 from app import hackathon_variables
 from app.mixins import TabsViewMixin
@@ -14,30 +14,47 @@ from hardware.tables import LendingTable, RequestTable
 
 
 def hardware_tabs(user):
-    first_tab = ('Hardware List', reverse('hw_list'), False)
     if user.is_volunteer:
-        first_tab = ('Hardware Admin', reverse('hw_admin'), False)
-    return [
-        first_tab,
-        ('Log', reverse('hw_log'), False)
-    ]
+        return [
+            ('Hardware Admin', reverse('hw_admin'), False),
+            ('Requests', reverse('hw_requests'), False),
+            ('Lendings', reverse('hw_lendings'), False)
+        ]
+    else:
+        return [
+            ('Hardware List', reverse('hw_list'), False),
+            ('Lendings', reverse('hw_lendings'), False)
+        ]
 
 
-class HardwareAdminLogView(TabsViewMixin, IsVolunteerMixin, TemplateView):
-    template_name = 'hardware_log.html'
+class HardwareAdminRequestsView(TabsViewMixin, IsVolunteerMixin, 
+    SingleTableMixin, TemplateView):
+    template_name = 'hardware_requests.html'
+    table_class = RequestTable
+    table_pagination = {'per_page':50}
 
     def get_current_tabs(self):
         return hardware_tabs(self.request.user)
 
-    def get_context_data(self, **kwargs):
-        context = super(HardwareAdminLogView, self).get_context_data(**kwargs)
-        context['table_lending'] =  Lending.objects.all()
-        context['table_request'] =  Request.objects.all()
-        return context
+    def get_queryset(self):
+        return Request.objects.all()
+
+class HardwareLendingsView(TabsViewMixin, SingleTableMixin, TemplateView):
+    template_name = 'hardware_lendings.html'
+    table_class = LendingTable
+    table_pagination = {'per_page':50}
+
+    def get_current_tabs(self):
+        return hardware_tabs(self.request.user)
+
+    def get_queryset(self):
+        if self.request.user.is_volunteer:
+            return Lending.objects.all()
+        else:
+            return Lending.objects.get_queryset().filter(user=self.request.user)
 
 
 class HardwareListView(LoginRequiredMixin, TabsViewMixin, TemplateView):
-
     template_name = 'hardware_list.html'
 
     def get_current_tabs(self):
@@ -47,7 +64,9 @@ class HardwareListView(LoginRequiredMixin, TabsViewMixin, TemplateView):
         context = super(HardwareListView, self).get_context_data(**kwargs)
         context['hw_list'] = ItemType.objects.all()
         requests = Request.objects.get_active_by_user(self.request.user)
-        context['requests'] = {x.item_type.id: x.get_remaining_time() for x in requests}
+        context['requests'] = {
+            x.item_type.id: x.get_remaining_time() for x in requests
+        }
         return context
 
     def req_item(self, request):

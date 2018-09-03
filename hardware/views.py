@@ -1,5 +1,6 @@
 from django.urls import reverse
 from django.views.generic import TemplateView
+from django_filters.views import FilterView
 from django.template.loader import render_to_string
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
@@ -10,7 +11,7 @@ from app import hackathon_variables
 from app.mixins import TabsViewMixin
 from user.models import User
 from hardware.models import Item, ItemType, Lending, Request
-from hardware.tables import LendingTable, RequestTable
+from hardware.tables import LendingTable, LendingFilter, RequestTable, RequestFilter
 
 
 def hardware_tabs(user):
@@ -28,10 +29,11 @@ def hardware_tabs(user):
 
 
 class HardwareAdminRequestsView(TabsViewMixin, IsVolunteerMixin, 
-    SingleTableMixin, TemplateView):
+    SingleTableMixin, FilterView):
     template_name = 'hardware_requests.html'
     table_class = RequestTable
     table_pagination = {'per_page':50}
+    filterset_class = RequestFilter
 
     def get_current_tabs(self):
         return hardware_tabs(self.request.user)
@@ -39,10 +41,11 @@ class HardwareAdminRequestsView(TabsViewMixin, IsVolunteerMixin,
     def get_queryset(self):
         return Request.objects.all()
 
-class HardwareLendingsView(TabsViewMixin, SingleTableMixin, TemplateView):
+class HardwareLendingsView(TabsViewMixin, SingleTableMixin, FilterView):
     template_name = 'hardware_lendings.html'
     table_class = LendingTable
     table_pagination = {'per_page':50}
+    filterset_class = LendingFilter
 
     def get_current_tabs(self):
         return hardware_tabs(self.request.user)

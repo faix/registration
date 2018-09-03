@@ -29,7 +29,8 @@ class ItemType(models.Model):
         return ava_count - req_count - lent_count
 
     def get_requested_count(self):
-        return len(Request.objects.get_active_by_item_type(self))
+        #return len(Request.objects.get_active_by_item_type(self))
+        return Request.objects.get_active_by_item_type(self).count()
 
     def get_lent_count(self):
         return Lending.objects.get_active_by_item_type(self).count()
@@ -64,25 +65,27 @@ class Item(models.Model):
         return '{} ({})'.format(self.label, self.item_type.name)
 
 
-class LendingManager(models.Manager):
+class LendingQuerySet(models.QuerySet):
     def get_active(self):
-        return self.get_queryset().filter(return_time__isnull=True)
+            return self.filter(return_time__isnull=True)
+
+    def get_returned(self):
+        return self.filter(return_time__isnull=False)
 
     def get_active_by_item_type(self, item_type):
-        return self.get_queryset().filter(return_time__isnull=True, item__item_type=item_type)
+        return self.filter(return_time__isnull=True, item__item_type=item_type)
 
     def get_active_by_user(self, user):
-        return self.get_queryset().filter(return_time__isnull=True, user=user)
+        return self.filter(return_time__isnull=True, user=user)
 
 
 class Lending(models.Model):
     """
     The 'item' has been lent to the 'user'
     """
-    objects = LendingManager()
+    objects = LendingQuerySet.as_manager()
 
     user = models.ForeignKey(User)
-    # An item can't be lent twice at the same time
     item = models.ForeignKey(Item)
     # Instant of creation
     picked_up_time = models.DateTimeField(auto_now_add=True)
@@ -101,18 +104,29 @@ class Lending(models.Model):
     def __str__(self):
         return '{} ({})'.format(self.item.item_type.name, self.user)
 
-
-class RequestManager(models.Manager):
+class RequestQuerySet(models.QuerySet):
     def get_active(self):
-        return [x for x in self.get_queryset() if x.is_active()]
+        delta = timedelta(minutes=hackathon_variables.REQUEST_TIME)
+        threshold = timezone.now()-delta
+        return self.filter(lending__isnull=True, request_time__gte=threshold)
+
+    def get_lent(self):
+        return self.filter(lending__isnull=False)
+
+    def get_expired(self):
+        delta = timedelta(minutes=hackathon_variables.REQUEST_TIME)
+        threshold = timezone.now()-delta
+        return self.filter(lending__isnull=True, request_time__lt=threshold)
 
     def get_active_by_user(self, user):
-        qs = self.get_queryset().filter(user=user)
-        return [x for x in qs if x.is_active()]
+        delta = timedelta(minutes=hackathon_variables.REQUEST_TIME)
+        threshold = timezone.now()-delta
+        return self.filter(request_time__gte=threshold, user=user)
 
     def get_active_by_item_type(self, item_type):
-        qs = self.get_queryset().filter(item_type=item_type)
-        return [x for x in qs if x.is_active()]
+        delta = timedelta(minutes=hackathon_variables.REQUEST_TIME)
+        threshold = timezone.now()-delta
+        return self.filter(request_time__gte=threshold, item_type=item_type)
 
 
 class Request(models.Model):
@@ -121,7 +135,7 @@ class Request(models.Model):
     of type 'item_type' done by 'user'
     """
 
-    objects = RequestManager()
+    objects = RequestQuerySet.as_manager()
 
     # Requested item type
     item_type = models.ForeignKey(ItemType)

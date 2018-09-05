@@ -12,10 +12,10 @@ let hw_admin = ((hw)=>{
             hw.toast(data.msg)
         
         if(data.content){
-            $('#hw-container').hide(200, ()=>{
+            $('#hw-container').fadeTo(200, 0, ()=>{
                 $('#hw-container').html(data.content)
                 obj.initListeners()
-                $('#hw-container').show(200)
+                $('#hw-container').fadeTo(200, 1)
             })
         }
     }
@@ -53,6 +53,7 @@ let hw_admin = ((hw)=>{
                 'request_id': ev.currentTarget.parentNode.dataset.requestId
             }, obj.processResponse)
         })
+        /* Admin no request hardware type element */
         $("#hw-type-noreq li").on("click", (ev)=>{
             hw.ajax_req({
                 'select_type_noreq': true,

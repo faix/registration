@@ -79,3 +79,16 @@
 .hw-quantity span:nth-child(5){
 	color: #ff6b6b;
 }
+
+#hw-admin-lending h3{
+	color:#aaa;
+}
+
+#hw-available-items-list-noreq li{
+	padding:10px;
+}
+
+#hw-available-items-list-noreq span{
+	font-weight:bold;
+	font-size:24px;
+}

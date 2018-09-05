@@ -1,5 +1,7 @@
-<div>
-	<h1>Select the item to be lent:</h1>
+<div id='hw-admin-lending'>
+	<h1>Select the item to be lent</h1>
+	<!--We always have 1 item, otherwise we couldn't have accessed here-->
+	<h3>List of all available {{items.0.item_type.name}}'s:</h3>
 	{% if request_id %}
 	<ul data-request-id="{{request_id}}" id="hw-available-items-list">
 	{% else %}
@@ -7,8 +9,7 @@
 	{% endif %}
 		{% for item in items %}
 			<li class='hw-button' data-item-id="{{item.id}}">
-				<h1>{{item}}</h1>
-				<p>{{item.comments}}</p>
+				<span>{{item.label}}: </span> {{item.comments}}
 			</li>
 		{% endfor %}
 	</ul>

@@ -5,17 +5,17 @@ let hw_admin = ((hw)=>{
         return;  
     } 
     let obj = {};
-    //-Changes the content if any
+    //-Updates the content
     //-Shows a toast if there's a message
     obj.processResponse = (data)=>{
         if(data.msg) 
             hw.toast(data.msg)
         
         if(data.content){
-            $('#hw_container').hide(200, ()=>{
-                $('#hw_container').html(data.content)
+            $('#hw-container').hide(200, ()=>{
+                $('#hw-container').html(data.content)
                 obj.initListeners()
-                $('#hw_container').show(200)
+                $('#hw-container').show(200)
             })
         }
     }

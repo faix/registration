@@ -1,4 +1,81 @@
-.hw_button{
+.hw-centered{
+	text-align:center;
+}
+
+.hw-button{
 	border:thin solid black;
 	cursor:pointer;
+}
+
+/*
+	Hardware Admin
+*/
+.hw-separator{
+	display:flex;
+	font-weight:bold;
+	margin:20px 0;
+	font-size:20px;
+}
+.hw-separator::before, .hw-separator::after{
+	content: ' ';
+	display:block;
+	flex: 1 1 auto;
+	height:1px;
+	margin:14px;
+	background-color:#aaa;
+}
+
+.hw-subtitle{
+	text-align:center;
+	color: #aaa;
+	font-size:13px;
+	margin: -25px 0 15px;
+}
+
+.hw-item-compact{
+	display:flex;
+	align-items:center;
+	padding:10px;
+	flex:1 1 330px;
+	/* overlap inner border */
+	margin:-0.5px;
+}
+
+.hw-item-compact h3{
+	flex: 1 1 auto;
+	margin:0;
+}
+.hw-item-unavailable{
+	opacity:0.7;
+	cursor:not-allowed;
+}
+
+#hw-type-noreq{
+	display:flex;
+	flex-wrap:wrap;
+}
+
+.hw-quantity{
+	display:flex;
+	width:65px;
+	padding: 0 5px;
+	border-radius:3px;
+	text-align:center;
+	background-color: #333;
+	color:white;
+}
+.hw-quantity span{
+	flex: 1 1 auto;
+}
+.hw-quantity span:nth-child(odd){
+	font-weight:bold;
+}
+.hw-quantity span:nth-child(1){
+	color: #5cdd5c;
+}
+.hw-quantity span:nth-child(3){
+	color: #ffae6b;
+}
+.hw-quantity span:nth-child(5){
+	color: #ff6b6b;
 }

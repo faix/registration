@@ -24,13 +24,13 @@ let hw_admin = ((hw)=>{
         $("#hw-user-send").on("click", ()=>{
             hw.ajax_req({
                 'get_lists': true,
-                'email': $("#id_email").val()
+                'email': $("#id-email").val()
             }, obj.processResponse)
         })
         $("#hw-user-send-noreq").on("click", (ev)=>{
             hw.ajax_req({
                 'get_user_noreq': true,
-                'email': $("#id_email").val(),
+                'email': $("#id-email").val(),
                 'item_id': ev.currentTarget.dataset.itemId
             }, obj.processResponse)
         })

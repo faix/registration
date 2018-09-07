@@ -92,3 +92,11 @@
 	font-weight:bold;
 	font-size:24px;
 }
+
+#hw-user-lists ul li{
+	padding:10px;
+}
+
+#hw-user-lists ul h1{
+	font-size:28px;
+}

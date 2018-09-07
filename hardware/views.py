@@ -110,9 +110,12 @@ class HardwareAdminView(IsVolunteerMixin, TabsViewMixin, TemplateView):
         When a user has a request or a lending we get the lists
         to proceed
         """
-        target_user = User.objects.get(email=request.POST['email'])
-        if not target_user:
-            return self.init_and_toast("The user doesn't exist")
+        target_user = User.objects.filter(email=request.POST['email'])
+        if not target_user.exists():
+            #In this case we don't want to return to the initial page
+            return JsonResponse({
+                'msg': "ERROR: The user doesn't exist"
+            })
 
         requests = Request.objects.get_active_by_user(target_user)
         lendings = Lending.objects.get_active_by_user(target_user)
@@ -202,7 +205,12 @@ class HardwareAdminView(IsVolunteerMixin, TabsViewMixin, TemplateView):
         We can make the lending without request now
         """
         item = Item.objects.get(id=request.POST['item_id'])
-        target_user = User.objects.get(email=request.POST['email'])
+        target_user = User.objects.filter(email=request.POST['email'])
+        if not target_user.exists():
+            #In this case we don't want to return to the initial page
+            return JsonResponse({
+                'msg': "ERROR: The user doesn't exist"
+            })
         if not item.can_be_lent():
             return self.init_and_toast("ERROR: The item is not available")
 

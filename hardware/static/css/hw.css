@@ -7,6 +7,13 @@
 	cursor:pointer;
 }
 
+.hw-back{
+	position:absolute;
+	right:0;
+	margin:-15px 40px;
+	cursor:pointer;
+}
+
 /*
 	Hardware Admin
 */

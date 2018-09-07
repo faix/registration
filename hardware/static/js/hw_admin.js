@@ -21,6 +21,9 @@ let hw_admin = ((hw)=>{
     }
 
     obj.initListeners = ()=>{
+        $(".hw-back").on("click", ()=>{
+            window.location.reload()
+        })
         $("#hw-user-send").on("click", ()=>{
             hw.ajax_req({
                 'get_lists': true,

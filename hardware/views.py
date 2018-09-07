@@ -117,8 +117,8 @@ class HardwareAdminView(IsVolunteerMixin, TabsViewMixin, TemplateView):
                 'msg': "ERROR: The user doesn't exist"
             })
 
-        requests = Request.objects.get_active_by_user(target_user)
-        lendings = Lending.objects.get_active_by_user(target_user)
+        requests = Request.objects.get_active_by_user(target_user.first())
+        lendings = Lending.objects.get_active_by_user(target_user.first())
         html = render_to_string("include/hardware_admin_user.html", {
             'requests': requests,
             'lendings': lendings
@@ -214,7 +214,7 @@ class HardwareAdminView(IsVolunteerMixin, TabsViewMixin, TemplateView):
         if not item.can_be_lent():
             return self.init_and_toast("ERROR: The item is not available")
 
-        lending = Lending(user=target_user, item=item)
+        lending = Lending(user=target_user.first(), item=item)
         lending.save()
         return self.init_and_toast("The item has been lent succesfully")
 

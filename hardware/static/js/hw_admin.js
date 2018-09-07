@@ -22,7 +22,9 @@ let hw_admin = ((hw)=>{
 
     obj.initListeners = ()=>{
         $(".hw-back").on("click", ()=>{
-            window.location.reload()
+            hw.ajax_req({
+                'back': true
+            }, obj.processResponse)
         })
         $("#hw-user-send").on("click", ()=>{
             hw.ajax_req({

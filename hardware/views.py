@@ -234,6 +234,8 @@ class HardwareAdminView(IsVolunteerMixin, TabsViewMixin, TemplateView):
                 return self.select_item_noreq(request)
             if 'get_user_noreq' in request.POST:
                 return self.get_user_noreq(request)
+            if 'back' in request.POST:
+                return self.init_and_toast("")
 
     def get_current_tabs(self):
         return hardware_tabs(self.request.user)

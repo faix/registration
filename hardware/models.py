@@ -121,12 +121,12 @@ class RequestQuerySet(models.QuerySet):
     def get_active_by_user(self, user):
         delta = timedelta(minutes=hackathon_variables.REQUEST_TIME)
         threshold = timezone.now()-delta
-        return self.filter(request_time__gte=threshold, user=user)
+        return self.filter(lending__isnull=True, request_time__gte=threshold, user=user)
 
     def get_active_by_item_type(self, item_type):
         delta = timedelta(minutes=hackathon_variables.REQUEST_TIME)
         threshold = timezone.now()-delta
-        return self.filter(request_time__gte=threshold, item_type=item_type)
+        return self.filter(lending__isnull=True, request_time__gte=threshold, item_type=item_type)
 
 
 class Request(models.Model):

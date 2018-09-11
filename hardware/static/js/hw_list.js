@@ -4,6 +4,22 @@ let hw_list = ((hw)=>{
         return;  
     } 
     let obj = {}
+    /* private */
+    function updateTimer(element, targetMs){
+        let d = new Date(targetMs-Date.now())
+        let count = ""
+        if (d < 0)
+            count = "Expired"
+        else
+        {
+            let mins = Math.floor((d%(1000*60*60)) / (1000*60))
+            let secs = Math.floor((d%(1000*60)) / 1000)
+            count = mins +":"+hw.pad(secs)
+        }
+
+        element.innerHTML=count
+    }
+    /* public */
     obj.setTimer=(element)=>{
         element.disabled = true
         start = Date.now()
@@ -12,19 +28,9 @@ let hw_list = ((hw)=>{
         ds.setMinutes(str[1])
         ds.setSeconds(str[2])
         let targetMs = start+ds.getTime()
-        setInterval(function(){
-            let d = new Date(targetMs-Date.now())
-            let count = ""
-            if (d < 0)
-                count = "Expired"
-            else
-            {
-                let mins = Math.floor((d%(1000*60*60)) / (1000*60))
-                let secs = Math.floor((d%(1000*60)) / 1000)
-                count = mins +":"+secs
-            }
-
-            element.innerHTML=count
+        updateTimer(element, targetMs)
+        setInterval(()=>{
+            updateTimer(element, targetMs)
         },1000)
 
     }
@@ -41,6 +47,10 @@ let hw_list = ((hw)=>{
                     obj.setTimer(ev.currentTarget)
                 }
             })
+        })
+        $(".hw-toggle-desc").on("click", (ev)=>{
+            $(ev.currentTarget).toggleClass("open")
+            $(ev.currentTarget).siblings(".hw-description").toggleClass("open")
         })
     }
     return obj

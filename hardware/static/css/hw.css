@@ -1,109 +1,237 @@
 .hw-centered{
-	text-align:center;
+    text-align:center;
 }
 
 .hw-button{
-	border:thin solid black;
-	cursor:pointer;
+    border:thin solid black;
+    cursor:pointer;
 }
 
 .hw-back{
-	position:absolute;
-	right:0;
-	margin:-15px 40px;
-	cursor:pointer;
+    position:absolute;
+    right:0;
+    margin:-15px 40px;
+    cursor:pointer;
+}
+
+.hw-available-color{
+    color: #5cdd5c;
+}
+.hw-request-color{
+    color: #ffae6b;
+}
+.hw-lending-color{
+    color: #ff6b6b;
 }
 
 /*
-	Hardware Admin
+    Hardware list (user)
+*/
+#hw-list{
+    display:flex;
+    flex-wrap:wrap;
+}
+.hw-item{
+    position:relative;
+    flex: 1 1 500px;
+    height:200px;
+    margin:20px;
+    background-size:cover;
+    background-position: center;
+    overflow:hidden;
+    border: thin solid #333;
+}
+.hw-item .hw-bg{
+    background: linear-gradient(transparent, #6b6b6b);
+}
+
+/* Toggle description button */
+.hw-toggle-desc{
+    position:absolute;
+    right:15px;
+    top:5px;
+    z-index:2;
+    color:#333;
+    cursor:pointer;
+    transition-property: color;
+    transition-duration: 200ms;
+}
+.hw-toggle-desc.open{
+    color:#ddd;
+}
+
+.hw-toggle-desc span{
+    display:inline-block;
+    transform:rotate(0);
+    transition-property: transform;
+    transition-duration: 200ms;
+}
+
+.hw-toggle-desc.open span{
+    transform:rotate(45deg);
+}
+/* /Toggle description button */
+
+/* Item stats */
+.hw-stats{
+    position:absolute;
+    bottom:20px;
+    width:25px;
+    padding:4px 0;
+    text-align:center;
+    background-color:#333;
+    color:#ddd;
+    border-radius:5px;
+    overflow:hidden;
+    cursor:default;
+    transition: width 200ms;
+}
+.hw-stats:hover{
+    width:105px;
+}
+.hw-stats > div{
+    display:flex;
+}
+.hw-stats > div > div{
+    flex: 0 0 auto;
+}
+.hw-stats div .num{
+    width:25px;
+    font-weight:bold;
+}
+
+/* /Item stats */
+
+.hw-item .hw-description{
+    height:0;
+    padding:0;
+    background-color:#333;
+    color:#aaa;
+    overflow:hidden;
+    transition-property:height, padding;
+    transition-duration:200ms;
+}
+
+.hw-item .hw-description.open{
+    height:200px;
+    padding:15px;
+}
+
+.hw-item .hw-title{
+    position:relative;
+    padding: 15px;
+    height: 200px;
+}
+
+.hw-req-btn{
+    position:absolute;
+    width:130px;
+    right:20px;
+    bottom: 20px;
+    background-color:transparent;
+    border: 5px solid white;
+    padding: 5px 20px;
+    color:white;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.hw-req-btn[disabled]{
+    background-color:white;
+    color: black;
+}
+
+
+/*
+    Hardware Admin
 */
 .hw-separator{
-	display:flex;
-	font-weight:bold;
-	margin:20px 0;
-	font-size:20px;
+    display:flex;
+    font-weight:bold;
+    margin:20px 0;
+    font-size:20px;
 }
 .hw-separator::before, .hw-separator::after{
-	content: ' ';
-	display:block;
-	flex: 1 1 auto;
-	height:1px;
-	margin:14px;
-	background-color:#aaa;
+    content: ' ';
+    display:block;
+    flex: 1 1 auto;
+    height:1px;
+    margin:14px;
+    background-color:#aaa;
 }
 
 .hw-subtitle{
-	text-align:center;
-	color: #aaa;
-	font-size:13px;
-	margin: -25px 0 15px;
+    text-align:center;
+    color: #aaa;
+    font-size:13px;
+    margin: -25px 0 15px;
 }
 
 .hw-item-compact{
-	display:flex;
-	align-items:center;
-	padding:10px;
-	flex:1 1 330px;
-	/* overlap inner border */
-	margin:-0.5px;
+    display:flex;
+    align-items:center;
+    padding:10px;
+    flex:1 1 330px;
+    /* overlap inner border */
+    margin:-0.5px;
 }
 
 .hw-item-compact h3{
-	flex: 1 1 auto;
-	margin:0;
+    flex: 1 1 auto;
+    margin:0;
 }
 .hw-item-unavailable{
-	opacity:0.5;
-	cursor:not-allowed;
+    opacity:0.5;
+    cursor:not-allowed;
 }
 
 #hw-type-noreq{
-	display:flex;
-	flex-wrap:wrap;
+    display:flex;
+    flex-wrap:wrap;
 }
 
 .hw-quantity{
-	display:flex;
-	width:65px;
-	padding: 0 5px;
-	border-radius:3px;
-	text-align:center;
-	background-color: #333;
-	color:white;
+    display:flex;
+    width:65px;
+    padding: 0 5px;
+    border-radius:3px;
+    text-align:center;
+    background-color: #333;
+    color:white;
 }
 .hw-quantity span{
-	flex: 1 1 auto;
+    flex: 1 1 auto;
 }
 .hw-quantity span:nth-child(odd){
-	font-weight:bold;
+    font-weight:bold;
 }
 .hw-quantity span:nth-child(1){
-	color: #5cdd5c;
+    color: #5cdd5c;
 }
 .hw-quantity span:nth-child(3){
-	color: #ffae6b;
+    color: #ffae6b;
 }
 .hw-quantity span:nth-child(5){
-	color: #ff6b6b;
+    color: #ff6b6b;
 }
 
 #hw-admin-lending h3{
-	color:#aaa;
+    color:#aaa;
 }
 
 #hw-available-items-list-noreq li{
-	padding:10px;
+    padding:10px;
 }
 
 #hw-available-items-list-noreq span{
-	font-weight:bold;
-	font-size:24px;
+    font-weight:bold;
+    font-size:24px;
 }
 
 #hw-user-lists ul li{
-	padding:10px;
+    padding:10px;
 }
 
 #hw-user-lists ul h1{
-	font-size:28px;
+    font-size:28px;
 }

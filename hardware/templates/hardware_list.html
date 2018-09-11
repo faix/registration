@@ -2,6 +2,7 @@
 {% load static %}
 {% load hardware_extras %}
 {% block extra_head %}
+    <link rel="stylesheet" href="{% static 'css/hw.css' %}">
     <script > window.CSRF_TOKEN = "{{ csrf_token }}"</script>
 
     <script type="text/javascript" src="{% static 'js/hw.js' %}"></script>
@@ -9,9 +10,9 @@
 {% endblock %}
 {% block head_title %}Hardware List{% endblock %}
 {% block panel %}
-<ul>
+<ul id='hw-list'>
     {% for item_type in hw_list %}
-        <li>
+        <li class="hw-item" style="background-image:url({{ item_type.image.url }})">
             {% include 'include/hardware_item.html'%}
         </li>
     {% empty %}

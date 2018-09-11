@@ -1,5 +1,7 @@
+<li class="{% if 'hardware' in request.build_absolute_uri %}active{% endif %}">
 {% if request.user.is_volunteer %}
-	<li><a href="{% url 'hw_admin' %}">Hardware</a></li>
+	<a href="{% url 'hw_admin' %}">Hardware</a>
 {% else %}
-	<li><a href="{% url 'hw_list' %}">Hardware</a></li>
+	<a href="{% url 'hw_list' %}">Hardware</a>
 {% endif %}
+</li>

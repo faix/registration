@@ -3,6 +3,12 @@ let hw_list = ((hw)=>{
         console.error("hw.js has to be declared before hw_list.js")
         return;  
     } 
+    //Time interval between availability checks
+    let POOLING_TIME = 5000
+    //Interval id. We set it to false when it's not running
+    let timer = false
+    //List of item ids to check availability
+    let checkItems = []
     let obj = {}
     /* private */
     function updateTimer(element, targetMs){
@@ -18,6 +24,22 @@ let hw_list = ((hw)=>{
         }
 
         element.innerHTML=count
+    }
+    function notifyAvailableItem(item){
+        hw.notify("A "+item.name+" has become available! Click the notification to request.", 
+            "HackathonAssistant", "", ()=>{
+            hw.ajax_req({
+                'req_item':true, 
+                'item_id': item.id,
+            }, (data)=>{
+                if(data.ok){
+                    let btn = $("[data-item-id="+item.id+"]")[0]
+                    btn.dataset.targetTime = "00:"+data.minutes+":00"
+                    obj.setTimer(btn)
+                }
+            })
+        })
+
     }
     /* public */
     obj.setTimer=(element)=>{
@@ -35,13 +57,55 @@ let hw_list = ((hw)=>{
 
     }
 
+    obj.stopPoolOf = (itemId)=>{
+        checkItems.splice(checkItems.indexOf(itemId), 1)
+    }
+
+    obj.poolAvailabilityOf = (itemId)=>{
+        checkItems.push(itemId)
+        if(!timer){
+            timer = setInterval(()=>{
+                if(!checkItems)
+                    timer = false
+                hw.ajax_req({
+                    'check_availability': true,
+                    'item_ids': checkItems
+                }, (data)=>{
+                    for(let item of data.available_items){
+                        obj.stopPoolOf(item.id)
+                        notifyAvailableItem(item)
+                    }
+                })
+            }, POOLING_TIME)
+        }
+    }
+
     obj.initListeners = ()=>{
-        $(".hw-req-btn").on("click", (ev)=>{
+        $("[data-action='lmk']").on("click", (ev)=>{
+            if($(ev.target).hasClass('active')){
+                $(ev.target).removeClass('active')
+                obj.stopPoolOf(ev.target.dataset.itemId)
+                return
+            }
+            if(!hw.canNotify){
+                hw.initNotifications((permission)=>{
+                    if(permission){
+                        hw.notify("Notifications enabled!")
+                        $(ev.target).addClass('active')
+                        obj.poolAvailabilityOf(ev.target.dataset.itemId)
+                    }
+                })
+            } else {
+                $(ev.target).addClass('active')
+                obj.poolAvailabilityOf(ev.target.dataset.itemId)
+            }
+
+        })
+        $("[data-action='request']").on("click", (ev)=>{
             hw.ajax_req({
                 'req_item':true, 
                 'item_id': ev.currentTarget.dataset.itemId,
             }, (data)=>{
-                if(data.msg) hw.toast(data.msg)
                 if(data.ok){
                     ev.currentTarget.dataset.targetTime = "00:"+data.minutes+":00"
                     obj.setTimer(ev.currentTarget)

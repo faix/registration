@@ -23,9 +23,11 @@
             <div><div class='num hw-lending-color'>{{ item_type.get_lent_count }}</div> <div>Lent</div></div>
         </div>
         {% if item_type.id in requests %}
-            <button class='hw-req-btn' data-item-id='{{ item_type.id }}' disabled data-target-time='{{requests|get_item:item_type.id}}'>Request</button>
+            <button class='hw-req-btn' data-item-id='{{ item_type.id }}' disabled data-target-time='{{requests|get_item:item_type.id}}'></button>
+        {% elif item_type.get_available_count == 0 %}
+            <button class='hw-req-btn' data-action='lmk' data-item-id='{{ item_type.id }}'>LMK</button>
         {% else %}
-            <button class='hw-req-btn' data-item-id='{{ item_type.id }}'>REQUEST</button>
+            <button class='hw-req-btn' data-action='request' data-item-id='{{ item_type.id }}'>REQUEST</button>
         {% endif %}
     </div>
 </div>

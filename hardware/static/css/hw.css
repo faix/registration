@@ -161,7 +161,7 @@
     font-size: 18px;
 }
 
-.hw-req-btn[disabled]{
+.hw-req-btn[disabled], .hw-req-btn.active{
     background-color:white;
     color: black;
 }

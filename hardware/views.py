@@ -83,10 +83,28 @@ class HardwareListView(LoginRequiredMixin, TabsViewMixin, TemplateView):
 
         return JsonResponse({'msg': "ERROR: There are no items available"})
 
+    def check_availability(self, request):
+        item_ids = request.POST['item_ids[]']
+        items = ItemType.objects.filter(id__in=item_ids)
+        available_items = []
+        for item in items:
+            if item.get_available_count() > 0:
+                available_items.append({
+                    "id": item.id,
+                    "name": item.name
+                })
+
+        return JsonResponse({
+            'available_items': available_items
+        })
+
+
     def post(self, request):
         if request.is_ajax:
             if 'req_item' in request.POST:
                 return self.req_item(request)
+            if 'check_availability' in request.POST:
+                return self.check_availability(request)
 
 
 class HardwareAdminView(IsVolunteerMixin, TabsViewMixin, TemplateView):

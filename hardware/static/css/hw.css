@@ -14,6 +14,12 @@
     cursor:pointer;
 }
 
+.hw-help-color-bg{
+    background-color:#333;
+    border-radius:3px;
+    padding:2px;
+    font-weight:bold;
+}
 .hw-available-color{
     color: #5cdd5c;
 }
@@ -45,32 +51,51 @@
     background: linear-gradient(transparent, #6b6b6b);
 }
 
-/* Toggle description button */
-.hw-toggle-desc{
-    position:absolute;
-    right:15px;
-    top:5px;
-    z-index:2;
-    color:#333;
-    cursor:pointer;
-    transition-property: color;
-    transition-duration: 200ms;
-}
-.hw-toggle-desc.open{
-    color:#ddd;
+.hw-help{
+    height:0;
+    margin:20px;
+    overflow:hidden;
+    transition:height 300ms;
 }
 
-.hw-toggle-desc span{
+.hw-help.open{
+    height:500px;
+}
+
+/* Toggle button */
+.hw-toggle{
+    cursor:pointer;
+}
+.hw-toggle span{
     display:inline-block;
     transform:rotate(0);
     transition-property: transform;
     transition-duration: 200ms;
 }
-
-.hw-toggle-desc.open span{
+.hw-toggle.open span{
     transform:rotate(45deg);
 }
-/* /Toggle description button */
+.hw-toggle-help{
+    position:absolute;
+    top:65px;
+    right:60px;
+}
+
+.hw-toggle.hw-item-desc{
+    position:absolute;
+    right:15px;
+    top:5px;
+    z-index:2;
+    color:#333;
+    transition-property: color;
+    transition-duration: 200ms;
+}
+.hw-toggle.hw-item-desc.open{
+    color:#ddd;
+}
+
+
+/* /Toggle button */
 
 /* Item stats */
 .hw-stats{
@@ -114,7 +139,7 @@
 
 .hw-item .hw-description.open{
     height:200px;
-    padding:15px;
+    padding:30px 15px 0;
 }
 
 .hw-item .hw-title{

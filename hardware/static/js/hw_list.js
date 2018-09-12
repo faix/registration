@@ -48,9 +48,9 @@ let hw_list = ((hw)=>{
                 }
             })
         })
-        $(".hw-toggle-desc").on("click", (ev)=>{
+        $(".hw-toggle").on("click", (ev)=>{
             $(ev.currentTarget).toggleClass("open")
-            $(ev.currentTarget).siblings(".hw-description").toggleClass("open")
+            $(ev.currentTarget).siblings(".hw-toggle-actor").toggleClass("open")
         })
     }
     return obj

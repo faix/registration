@@ -42,6 +42,8 @@ let hw_list = ((hw)=>{
 
     }
     /* public */
+    //Starts the countdown on the element
+    //pre: the element has to have a valid data-target-time
     obj.setTimer=(element)=>{
         element.disabled = true
         start = Date.now()
@@ -56,12 +58,14 @@ let hw_list = ((hw)=>{
         },1000)
 
     }
-
-    obj.stopPoolOf = (itemId)=>{
+    //stops checking availability on the specified item
+    obj.stopPool = (itemId)=>{
         checkItems.splice(checkItems.indexOf(itemId), 1)
     }
 
-    obj.poolAvailabilityOf = (itemId)=>{
+    //Starts checking availability on the specified item
+    //triggers a notification if 
+    obj.poolAvailability = (itemId)=>{
         checkItems.push(itemId)
         if(!timer){
             timer = setInterval(()=>{
@@ -72,19 +76,18 @@ let hw_list = ((hw)=>{
                     'item_ids': checkItems
                 }, (data)=>{
                     for(let item of data.available_items){
-                        obj.stopPoolOf(item.id)
+                        obj.stopPool(item.id)
                         notifyAvailableItem(item)
                     }
                 })
             }, POOLING_TIME)
         }
     }
-
     obj.initListeners = ()=>{
         $("[data-action='lmk']").on("click", (ev)=>{
             if($(ev.target).hasClass('active')){
                 $(ev.target).removeClass('active')
-                obj.stopPoolOf(ev.target.dataset.itemId)
+                obj.stopPool(ev.target.dataset.itemId)
                 return
             }
             if(!hw.canNotify){
@@ -92,12 +95,12 @@ let hw_list = ((hw)=>{
                     if(permission){
                         hw.notify("Notifications enabled!")
                         $(ev.target).addClass('active')
-                        obj.poolAvailabilityOf(ev.target.dataset.itemId)
+                        obj.poolAvailability(ev.target.dataset.itemId)
                     }
                 })
             } else {
                 $(ev.target).addClass('active')
-                obj.poolAvailabilityOf(ev.target.dataset.itemId)
+                obj.poolAvailability(ev.target.dataset.itemId)
             }
 
         })

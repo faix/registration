@@ -3,9 +3,10 @@ from django.views.generic import TemplateView
 from django_filters.views import FilterView
 from django.template.loader import render_to_string
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.utils import timezone
 from django_tables2 import SingleTableMixin
+from django.core import serializers
 from user.mixins import IsVolunteerMixin
 from app import hackathon_variables
 from app.mixins import TabsViewMixin
@@ -236,8 +237,20 @@ class HardwareAdminView(IsVolunteerMixin, TabsViewMixin, TemplateView):
         lending.save()
         return self.init_and_toast("The item has been lent succesfully")
 
+    def identify_hacker(self, request):
+        """
+        Gets a list of suggestions based on the input (typeahead)
+        """
+        users = User.objects.filter(name__startswith=request.POST['query'])
+        return HttpResponse(serializers.serialize('json', list(users), fields=('name', 'email')))
+        return JsonResponse({
+            'suggestions': serializers.serialize('json', list(users), fields=('name', 'email'))
+        })
+
     def post(self, request):
         if request.is_ajax:
+            if 'identify_hacker' in request.POST:
+                return self.identify_hacker(request)
             if 'get_lists' in request.POST:
                 return self.get_lists(request)
             if 'select_request' in request.POST:

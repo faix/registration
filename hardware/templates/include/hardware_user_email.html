@@ -1,6 +1,6 @@
 <div class='hw-centered'>
-    <label>Hacker email:</label>
-    <input id="id-email" name="email" type="email"/>
+    <label>Hacker:</label>
+    <input id="id-email" class="typeahead" name="email" type="text"/>
     {% if item_id %}
     	<button id="hw-user-send-noreq" data-item-id="{{item_id}}">Send</button>
     {% else %}

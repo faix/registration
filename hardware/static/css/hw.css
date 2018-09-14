@@ -30,6 +30,11 @@
     color: #ff6b6b;
 }
 
+/*Typeahead*/
+.tt-menu{
+    background-color:white;
+    border:thin solid black;
+}
 /*
     Hardware list (user)
 */

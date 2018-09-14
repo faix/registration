@@ -5,6 +5,35 @@ let hw_admin = ((hw)=>{
         return;  
     } 
     let obj = {};
+
+
+    obj.initTypeaheads = ()=>{
+        if($("#id-email"))
+            $("#id-email").typeahead({
+                hint:true,
+                highlight:true,
+                minLength:1
+            },{
+                displayKey:'email',
+                async:true,
+                source: hw.debounce((query, a,b)=>{
+                    hw.ajax_req({
+                        identify_hacker:true,
+                        query:query
+                    }, (data)=>{
+                        let pd = JSON.parse(data)
+                        let filtered = pd.map(x => x.fields)
+                        console.log(filtered)
+                        b(filtered)
+                    })
+                }, 500),
+                templates:{
+                    suggestion:function(data){
+                        return "<div>"+ data.name + " ("+data.email+")</div>"
+                    }
+                }
+            });
+    }
     //-Updates the content
     //-Shows a toast if there's a message
     obj.processResponse = (data)=>{
@@ -15,10 +44,12 @@ let hw_admin = ((hw)=>{
             $('#hw-container').fadeTo(200, 0, ()=>{
                 $('#hw-container').html(data.content)
                 obj.initListeners()
+                obj.initTypeaheads()
                 $('#hw-container').fadeTo(200, 1)
             })
         }
     }
+
 
     obj.initListeners = ()=>{
         $(".hw-back").on("click", ()=>{
@@ -78,7 +109,7 @@ let hw_admin = ((hw)=>{
     return obj
 })(hw)
 
-
 document.addEventListener("DOMContentLoaded", ()=>{
     hw_admin.initListeners()
+    hw_admin.initTypeaheads()
 })

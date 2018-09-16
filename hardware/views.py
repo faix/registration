@@ -171,6 +171,7 @@ class HardwareAdminView(IsVolunteerMixin, TabsViewMixin, TemplateView):
             return self.init_and_toast("ERROR: The item was not lent")
 
         lending.return_time = timezone.now()
+        lending.return_by = request.user
         lending.save()
         return self.init_and_toast("The item has been returned succesfully")
 
@@ -184,7 +185,7 @@ class HardwareAdminView(IsVolunteerMixin, TabsViewMixin, TemplateView):
             return self.init_and_toast("ERROR: The item is not available")
 
         request_obj = Request.objects.get(id=request.POST['request_id'])
-        lending = Lending(user=request_obj.user, item=item)
+        lending = Lending(user=request_obj.user, item=item, lending_by=request.user)
         lending.save()
         request_obj.lending = lending
         request_obj.save()
@@ -233,7 +234,7 @@ class HardwareAdminView(IsVolunteerMixin, TabsViewMixin, TemplateView):
         if not item.can_be_lent():
             return self.init_and_toast("ERROR: The item is not available")
 
-        lending = Lending(user=target_user.first(), item=item)
+        lending = Lending(user=target_user.first(), item=item, lending_by=request.user)
         lending.save()
         return self.init_and_toast("The item has been lent succesfully")
 

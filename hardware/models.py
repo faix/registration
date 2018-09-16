@@ -29,7 +29,6 @@ class ItemType(models.Model):
         return ava_count - req_count - lent_count
 
     def get_requested_count(self):
-        #return len(Request.objects.get_active_by_item_type(self))
         return Request.objects.get_active_by_item_type(self).count()
 
     def get_lent_count(self):
@@ -91,6 +90,11 @@ class Lending(models.Model):
     picked_up_time = models.DateTimeField(auto_now_add=True)
     # If null: item has not been returned yet
     return_time = models.DateTimeField(null=True, blank=True)
+
+    #Lending handled by
+    lending_by = models.ForeignKey(User, related_name='hardware_admin_lending')
+    #Return handled by (null until returned)
+    return_by = models.ForeignKey(User, related_name='hardware_admin_return', null=True, blank=True)
 
     def get_picked_up_time_ago(self):
         return str(timezone.now() - self.picked_up_time)

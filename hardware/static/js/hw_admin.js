@@ -23,7 +23,6 @@ let hw_admin = ((hw)=>{
                     }, (data)=>{
                         let pd = JSON.parse(data)
                         let filtered = pd.map(x => x.fields)
-                        console.log(filtered)
                         b(filtered)
                     })
                 }, 500),

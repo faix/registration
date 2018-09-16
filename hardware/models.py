@@ -11,7 +11,7 @@ class ItemType(models.Model):
     # Human readable name
     name = models.CharField(max_length=50, unique=True)
     # Image of the hardware
-    image = models.ImageField(upload_to='hw_images/')
+    image = models.FileField(upload_to='hw_images/')
     # Description of this hardware
     # what is it used for? which items are contained in the package?
     description = models.TextField()

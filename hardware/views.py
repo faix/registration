@@ -243,9 +243,6 @@ class HardwareAdminView(IsVolunteerMixin, TabsViewMixin, TemplateView):
         """
         users = User.objects.filter(name__startswith=request.POST['query'])
         return HttpResponse(serializers.serialize('json', list(users), fields=('name', 'email')))
-        return JsonResponse({
-            'suggestions': serializers.serialize('json', list(users), fields=('name', 'email'))
-        })
 
     def post(self, request):
         if request.is_ajax:

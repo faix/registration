@@ -166,7 +166,7 @@ class ApplicationForm(OverwriteOnlyModelFormMixin, BetterModelForm):
         data = self.cleaned_data['other_diet']
         diet = self.cleaned_data['diet']
         if diet == 'Others' and not data:
-            raise forms.ValidationError("Please fill your specific diet requirements.")
+            raise forms.ValidationError("Please tell us your specific dietary requirements.")
         return data
 
     def __getitem__(self, name):
@@ -237,9 +237,9 @@ class ApplicationForm(OverwriteOnlyModelFormMixin, BetterModelForm):
             'graduation_year': 'What year have you graduated on or when will '
                                'you graduate.',
             'degree': 'What\'s your major?',
-            'other_diet': 'Please fill here your dietary restrictions. We want to make sure we have food for you!',
-            'lennyface': 'You can chose one from '
-                         '<a href="https://lenny-face-generator.textsmilies.com/" target="_blank">here</a>!',
+            'other_diet': 'Please fill here in your dietary restrictions. We want to make sure we have food for you!',
+            'lennyface': 'tip: you can chose from here <a href="http://textsmili.es/" target="_blank">'
+                         ' http://textsmili.es/</a>',
             'hardware': 'Any hardware that you would like us to have. We can\'t promise anything, '
                         'but at least we\'ll try!',
             'projects': 'You can talk about about past hackathons, personal projects, awards etc. '
@@ -268,7 +268,6 @@ class ApplicationForm(OverwriteOnlyModelFormMixin, BetterModelForm):
             'resume': 'Upload your resume',
             'reimb_amount': 'How much money (%s) would you need to afford traveling to %s?' % (
                 getattr(settings, 'CURRENCY', '€'), settings.HACKATHON_NAME),
-
         }
 
         exclude = ['user', 'uuid', 'invited_by', 'submission_date', 'status_update_date', 'status', ]

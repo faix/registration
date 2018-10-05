@@ -113,6 +113,7 @@
                             {% endif %}
                             {% include 'include/meals_tab.html' %}
                         {% endif %}
+                        <li><a href="{% url 'import_projects' %}">Judging</a></li>
                         <li><a href="{% url 'account_logout' %}">Logout</a></li>
 
                     {% else %}

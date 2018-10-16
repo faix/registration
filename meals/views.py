@@ -241,7 +241,6 @@ class MealsApi(APIView):
             meals = Meal.objects.all().order_by('starts')
         serializer = MealSerializer()
         meals_data = serializer.serialize(meals)
-        print(meals_data)
         return HttpResponse(json.dumps({'code': 0, 'content': meals_data}), content_type='application/json')
 
     def post(self, request, format=None):
